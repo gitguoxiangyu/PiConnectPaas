@@ -10,8 +10,8 @@ const router = createRouter({
       component: async () => await import('@/components/HelloWorld.vue')
     },
     {
-      path: '/login',
-      name: 'login',
+      path: '/',
+      name: 'mainPage',
       component: async () => await import('@/view/MainPage.vue')
     }
 
