@@ -105,6 +105,21 @@ export const put = async <T,>(url: string, data: IAnyObj): Promise<[any, FcRespo
   })
 }
 
+export const deleteRequest = async <T,>(url: string, data: IAnyObj): Promise<[any, FcResponse<T> | undefined]> => {
+  return await new Promise(resolve => {
+    axios
+      .delete(url, data)
+      .then(success => {
+        console.log(success)
+        resolve([null, success.data as FcResponse<T>])
+      })
+      .catch(err => {
+        console.log(err)
+        resolve([err, undefined])
+      })
+  })
+}
+
 /**
  * 跳转登录页
  * 携带当前页面路由，以期在登录页面完成登录后返回当前页面
