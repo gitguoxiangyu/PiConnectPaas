@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: async () => await import('@/components/HelloWorld.vue')
+      component: async () => await import('@/view/LoginView.vue')
     },
     {
       path: '/',

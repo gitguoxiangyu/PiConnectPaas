@@ -1,6 +1,6 @@
 // 封装 axios ，最后希望以 const [res , err] =  await api.getUserInfo()调用, { AxiosInstance , AxiosRequestConfig }
 import Axios from 'axios'
-import router from '@/router/index'
+// import router from '@/router/index'
 
 const axios = Axios
 // 配置不同环境下，axios的默认请求地址
@@ -124,38 +124,38 @@ export const deleteRequest = async <T,>(url: string, data: IAnyObj): Promise<[an
  * 跳转登录页
  * 携带当前页面路由，以期在登录页面完成登录后返回当前页面
  */
-const toLogin = (): void => {
-  router.replace({
-    path: '/login',
-    query: {
-      redirect: router.currentRoute.value.fullPath
-    }
-  }).catch(() => {
-    console.log('跳转错误')
-  })
-}
+// const toLogin = (): void => {
+//   router.replace({
+//     path: '/login',
+//     query: {
+//       redirect: router.currentRoute.value.fullPath
+//     }
+//   }).catch(() => {
+//     console.log('跳转错误')
+//   })
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const errorHandle = (status: number, other: any): void => {
-  // 状态码判断
-  switch (status) {
-    // 401: 未登录状态，跳转登录页
-    case 401:
-      toLogin()
-      break
-    // 403 token过期
-    // 清除token并跳转登录页
-    case 403:
-      localStorage.removeItem('token')
-      setTimeout(() => {
-        toLogin()
-      }, 1000)
-      break
-    // 404请求不存在
-    case 404:
-      console.log(404)
-      break
-    default:
-      console.log(other)
-  }
-}
+// const errorHandle = (status: number, other: any): void => {
+//   // 状态码判断
+//   switch (status) {
+//     // 401: 未登录状态，跳转登录页
+//     case 401:
+//       toLogin()
+//       break
+//     // 403 token过期
+//     // 清除token并跳转登录页
+//     case 403:
+//       localStorage.removeItem('token')
+//       setTimeout(() => {
+//         toLogin()
+//       }, 1000)
+//       break
+//     // 404请求不存在
+//     case 404:
+//       console.log(404)
+//       break
+//     default:
+//       console.log(other)
+//   }
+// }
