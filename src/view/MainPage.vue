@@ -11,6 +11,7 @@
         </el-menu>
       </div>
     </el-header>
+
     <el-container>
       <el-aside>
         <el-col :span="24">
@@ -42,9 +43,11 @@
           </el-menu>
         </el-col>
       </el-aside>
+
       <el-main>
         <router-view></router-view>
       </el-main>
+
     </el-container>
   </el-container>
 </template>
@@ -74,11 +77,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-body, html {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
 
 .el-header {
   background-color: #373d41;
