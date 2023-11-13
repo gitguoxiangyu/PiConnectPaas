@@ -7,7 +7,6 @@
         "standard-with-typescript",
         "plugin:vue/vue3-essential"
     ],
-    "parser": "vue-eslint-parser", // 解析vue
     "parserOptions": {
         "extraFileExtensions": [".vue"],
         "parser": "@typescript-eslint/parser",
@@ -15,14 +14,6 @@
         "project": "./tsconfig.json",
         "sourceType": "module"
     },
-    "overrides": [
-        {
-            "files": ["./tsconfig.json"],
-            "parserOptions": {
-                "project": null
-            }
-        }
-    ],
     "plugins": [
         "@typescript-eslint",
         "vue"
