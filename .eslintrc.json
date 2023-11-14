@@ -5,7 +5,7 @@
     },
     "extends": [
         "standard-with-typescript",
-        "plugin:vue/vue3-essential"
+        "plugin:vue/vue3-recommended"
     ],
     "parserOptions": {
         "extraFileExtensions": [".vue"],
@@ -19,70 +19,74 @@
         "vue"
     ],
     "rules": {
+        "quotes": "off",
+        "indent": ["error", 2],
         // 使用 ===
-        "eqeqeq": "error",
+        "eqeqeq": "error"
+        // // 使用 ===
+        // "eqeqeq": "error",
         
-        // 父类尽量返回 this 类型
-        "@typescript-eslint/prefer-return-this-type": "error",
+        // // 父类尽量返回 this 类型
+        // "@typescript-eslint/prefer-return-this-type": "error",
         
-        // 尽量使用 . 访问属性而不是 []
-        "@typescript-eslint/dot-notation": "error",
+        // // 尽量使用 . 访问属性而不是 []
+        // "@typescript-eslint/dot-notation": "error",
         
-        // 必须 throw Error
-        "@typescript-eslint/no-throw-literal": "error",
+        // // 必须 throw Error
+        // "@typescript-eslint/no-throw-literal": "error",
         
-        // ------------ async
-        // 返回 Promise 的函数一定要标记为 async 函数
-        "@typescript-eslint/promise-function-async": "error",
+        // // ------------ async
+        // // 返回 Promise 的函数一定要标记为 async 函数
+        // "@typescript-eslint/promise-function-async": "error",
         
-        // 不要 return await promise, 直接 return promise, 除非外面有 try catch
-        "@typescript-eslint/return-await": "error",
+        // // 不要 return await promise, 直接 return promise, 除非外面有 try catch
+        // "@typescript-eslint/return-await": "error",
         
-        // ------------ 括号
+        // // ------------ 括号
         
-        // a => { } 而不是 (a) => { }
-        "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
-        // 不要多余的大括号
-        // if (true)
-        //     console.log()
-        "curly": ["error", "multi"],
+        // // a => { } 而不是 (a) => { }
+        // "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
+        // // 不要多余的大括号
+        // // if (true)
+        // //     console.log()
+        // "curly": ["error", "multi"],
         
-        // ------------ 空格
+        // // ------------ 空格
         
-        // { a, b } 这样的对象，大括号里面要有空格
-        "@typescript-eslint/object-curly-spacing": ["error", "always"],
+        // // { a, b } 这样的对象，大括号里面要有空格
+        // "@typescript-eslint/object-curly-spacing": ["error", "always"],
         
-        // [a, b, c]
-        "@typescript-eslint/comma-spacing": "error",
+        // // [a, b, c]
+        // "@typescript-eslint/comma-spacing": "error",
         
-        // foo()
-        "@typescript-eslint/func-call-spacing": "error",
+        // // foo()
+        // "@typescript-eslint/func-call-spacing": "error",
         
-        // a => { } 中箭头左右两边空格
-        "arrow-spacing": ["error"],
+        // // a => { } 中箭头左右两边空格
+        // "arrow-spacing": ["error"],
         
-        // 注释双斜杠后面要有空格
-        "spaced-comment": ["error", "always", { "markers": ["/"] }],
+        // // 注释双斜杠后面要有空格
+        // "spaced-comment": ["error", "always", { "markers": ["/"] }],
         
-        // 函数声明中，名称后面要有空格
-        "@typescript-eslint/space-before-function-paren": "error",
+        // // 函数声明中，名称后面要有空格
+        // "@typescript-eslint/space-before-function-paren": "error",
         
-        // { return true } 这样的 block 大括号里面要有空格
-        "block-spacing": ["error", "always"],
+        // // { return true } 这样的 block 大括号里面要有空格
+        // "block-spacing": ["error", "always"],
         
-        // aaa: 123
-        "@typescript-eslint/key-spacing": ["error", { "beforeColon": false, "afterColon": true, "mode": "minimum" }],
+        // // aaa: 123
+        // "@typescript-eslint/key-spacing": ["error", { "beforeColon": false, "afterColon": true, "mode": "minimum" }],
         
-        // aaa: string
-        "@typescript-eslint/type-annotation-spacing": "error",
+        // // aaa: string
+        // "@typescript-eslint/type-annotation-spacing": "error",
         
-        // if ()
-        "@typescript-eslint/keyword-spacing": ["error", { "before": true, "after": true }],
+        // // if ()
+        // "@typescript-eslint/keyword-spacing": ["error", { "before": true, "after": true }],
         
-        // if (1) { }
-        "@typescript-eslint/space-before-blocks": "error",
+        // // if (1) { }
+        // "@typescript-eslint/space-before-blocks": "error",
         
-        // case 1: ...
-        "switch-colon-spacing": "error"
+        // // case 1: ...
+        // "switch-colon-spacing": "error"
     }
 }
