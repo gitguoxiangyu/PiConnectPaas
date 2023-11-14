@@ -78,6 +78,7 @@ const getResponse = async (): Promise<void> => {
   const [err, data] = await get(
       `/wxUser/isLogin?tempUserId=${wechatLoginInfo.value.tempUserId}`
   )
+  
   setTimeout(async () => {
     await getResponse()
     return void
