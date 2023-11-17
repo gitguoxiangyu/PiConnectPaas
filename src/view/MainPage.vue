@@ -5,13 +5,24 @@
         <div>
           <span>可视化管理系统</span>
         </div>
-        <el-menu mode="horizontal" background-color="#373d41" text-color="#fff"  router>
-          <el-button type="info" @click="logout">退出</el-button>
-          <el-menu-item index="/direction">查看方向</el-menu-item>
+        <el-menu
+          mode="horizontal"
+          background-color="#373d41"
+          text-color="#fff"
+          router
+        >
+          <el-button
+            type="info"
+            @click="logout"
+          >
+            退出
+          </el-button>
+          <el-menu-item index="/direction">
+            查看方向
+          </el-menu-item>
         </el-menu>
       </div>
     </el-header>
-
     <el-container>
       <el-aside>
         <el-col :span="24">
@@ -27,27 +38,34 @@
                 <span>系统界面</span>
               </template>
               <el-menu-item-group title="Group One">
-                <el-menu-item index="/first">界面一</el-menu-item>
-                <el-menu-item index="/second">界面二</el-menu-item>
+                <el-menu-item index="/first">
+                  界面一
+                </el-menu-item>
+                <el-menu-item index="/second">
+                  界面二
+                </el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="Group Two">
-                <el-menu-item index="/third">界面三</el-menu-item>
+                <el-menu-item index="/third">
+                  界面三
+                </el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <el-menu-item index="/othermes">
               <span>其它信息</span>
             </el-menu-item>
-            <el-menu-item index="/more" disabled>
+            <el-menu-item
+              index="/more"
+              disabled
+            >
               <span>更多介绍</span>
             </el-menu-item>
           </el-menu>
         </el-col>
       </el-aside>
-
       <el-main>
-        <router-view></router-view>
+        <router-view />
       </el-main>
-
     </el-container>
   </el-container>
 </template>
@@ -77,6 +95,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+body, html {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
 
 .el-header {
   background-color: #373d41;
