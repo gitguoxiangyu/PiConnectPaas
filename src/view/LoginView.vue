@@ -4,18 +4,13 @@ import { useRouter } from 'vue-router'
 import { type FcResponse, get, post } from '@/utils/index'
 import { ElMessage } from 'element-plus'
 import type { FormRules } from 'element-plus'
+import { type PhoneNumForm, type LoginForm, type SigninForm, type picIfo, type signinReturn, type wechatQRCode } from '@/type/login'
 
 const loginIng = ref(0)
 const router = useRouter()
 // 电话登录
 const subPhonenumBtn = ref(null)
 const phoneNumFormRef = ref()
-interface PhoneNumForm {
-  phoneNumber?: number | null
-  code?: string
-  tempKey?: string
-  data?: string
-}
 const phoneNumForm = ref<PhoneNumForm>({
   phoneNumber: null,
   code: '',
@@ -31,7 +26,7 @@ const phoneNumRules = ref<FormRules<PhoneNumForm>>({
     }
   ]
 })
-const subPhonenum = async () => {
+const subPhonenum = async (): Promise<void> => {
   await phoneNumFormRef.value.validate()
   const phoneNumObject = {
     phoneNumber: phoneNumForm.value.phoneNumber
@@ -43,20 +38,18 @@ const subPhonenum = async () => {
   if (err !== null) {
     console.log(err)
   } else {
-    console.log(subPhonenumBtn.value)
-
     phoneNumForm.value.tempKey = data?.data
     let timeout = 10
     const timeoutCtrl = setInterval(() => {
-      if (timeout == 1) {
+      if (timeout === 1) {
         clearInterval(timeoutCtrl)
       }
       timeout--
     }, 1000)
   }
 }
-const submitPhoneNum = async () => {
-  const [_, data] = await post<PhoneNumForm>(
+const submitPhoneNum = async (): Promise<void> => {
+  const [, data] = await post<PhoneNumForm>(
     '/user/verifyCode',
     phoneNumForm.value
   )
@@ -65,19 +58,16 @@ const submitPhoneNum = async () => {
   } else {
     console.log(data)
     ElMessage('登录成功')
-    router.push('/')
+    await router.push('/')
   }
 }
+
 onMounted(() => {
   console.log(subPhonenumBtn.value)
 })
 // 微信登录相关
 const wechatloginable = ref(false)
 const QRcodeready = ref(false)
-interface wechatQRCode {
-  qrUrl?: string
-  tempUserId?: string
-}
 const wechatLoginInfo = ref<wechatQRCode>({
   qrUrl: '',
   tempUserId: ''
@@ -85,15 +75,12 @@ const wechatLoginInfo = ref<wechatQRCode>({
 const getQRcod = async (): Promise<FcResponse<wechatQRCode> | undefined> => {
   const [err, data] = await get<wechatQRCode>('/wxUser/wxQr')
   if (err === null) {
-    console.error(err)
     ElMessage.error('暂时无法获取！')
     return undefined
   } else {
-    console.log(data)
     return data
   }
 }
-
 const getResponse = async (): Promise<void> => {
   //   // const lock = setInterval(async (): Promise<void> => {
   //   //   const [err, data] = await get(
@@ -116,21 +103,11 @@ const wechatlogin = async (): Promise<void> => {
   const data = await getQRcod()
   wechatLoginInfo.value.qrUrl = data?.data.qrUrl
   wechatLoginInfo.value.tempUserId = data?.data.tempUserId
-  setTimeout(() => {
-    QRcodeready.value = true
-    getResponse()
-  }, 1000)
-
+  await getResponse()
   console.log(wechatLoginInfo.value)
 }
 // 定义登录表单以及规则
 const ruleFormRef = ref()
-interface LoginForm {
-  username?: string
-  password?: string
-  repassword?: string
-  pic?: string
-}
 const loginForm = ref<LoginForm>({
   username: '',
   password: '',
@@ -162,7 +139,7 @@ const loginRules = ref<FormRules<LoginForm>>({
     }
   ]
 })
-const loginSubmit = async () => {
+const loginSubmit = async (): Promise<void> => {
   const picForm = ref({
     uuid: pic.value.uuid,
     codeOfUser: loginForm.value.pic
@@ -171,10 +148,10 @@ const loginSubmit = async () => {
     userName: loginForm.value.username,
     password: loginForm.value.password
   })
-  const [err, _] = await post('/captchaImage', picForm.value)
+  const [err] = await post('/captchaImage', picForm.value)
   if (err === null) {
     await ruleFormRef.value.validate()
-    const [_, data] = await post('/user/login', loginSubForm.value)
+    const [, data] = await post('/user/login', loginSubForm.value)
     if (data?.code === 400) {
       ElMessage.error('该手机号已经存在用户！')
     } else {
@@ -186,19 +163,12 @@ const loginSubmit = async () => {
         repassword: '',
         pic: ''
       }
-      router.push('/')
+      await router.push('/')
     }
   }
 }
 // 定义注册表单及其相应规则
 const signinFormRef = ref()
-interface SigninForm {
-  phoneNumber: string
-  password: string
-  nickName: string
-  gender: '女' | '男'
-  age: number
-}
 const signinForm = ref<SigninForm>({
   phoneNumber: '',
   password: '',
@@ -225,20 +195,9 @@ const signinRules = ref<FormRules<SigninForm>>({
   ],
   nickName: [{ required: true, message: '请输入昵称', trigger: 'blur' }]
 })
-interface signinReturn {
-  userId: number
-  userName: string
-  nickName: string
-  gender: '男' | '女'
-  phoneNumber: string
-  avatarUrl: null
-  token: string
-  age: number
-  registerDays: null
-}
 const signinSubmit = async (): Promise<void> => {
   await signinFormRef.value.validate()
-  const [_, data] = await post<signinReturn>(
+  const [, data] = await post<signinReturn>(
     '/user/register',
     signinForm.value
   )
@@ -261,19 +220,16 @@ const pic = ref<picIfo>({
   img: '',
   uuid: ''
 })
-interface picIfo {
-  img?: string
-  captchaEnabled?: boolean
-  uuid?: string
-}
 const getNumPiC = async (): Promise<void> => {
   const [err, data] = await get<picIfo>('/captchaImage')
   if (err !== null) console.error(err)
   else {
     pic.value.img = data?.data.img
     pic.value.uuid = data?.data.uuid
+    console.log(pic.value)
   }
 }
+
 onMounted(() => {
   void getNumPiC()
 })
@@ -339,7 +295,7 @@ onMounted(() => {
             />
             <img
               :src="`data:image/png;base64,${pic.img}`"
-              @click="getNumPiC"
+              @click="getNumPiC()"
             >
           </el-form-item>
           <div style="display: flex; justify-content: center; margin-top: 10%">
