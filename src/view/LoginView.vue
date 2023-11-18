@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { type FcResponse, get, post } from '@/utils/index'
+import { post } from '@/utils/index'
 import { ElMessage } from 'element-plus'
 import type { FormRules } from 'element-plus'
-import { type PhoneNumForm, type LoginForm, type SigninForm, type picIfo, type signinReturn, type wechatQRCode } from '@/type/login'
-
+import type { PhoneNumForm, LoginForm, SigninForm, picIfo, wechatQRCode } from '@/type/login'
+import { checkPhoneNum, getNumPiC, getQRcod, submitPhoneNumber } from '@/api/login'
 const loginIng = ref(0)
 const router = useRouter()
 // 电话登录
-const subPhonenumBtn = ref(null)
 const phoneNumFormRef = ref()
+const sendCodeCtrl = ref('点击发送')
+const enableSendCode = ref(false)
 const phoneNumForm = ref<PhoneNumForm>({
   phoneNumber: null,
   code: '',
@@ -28,43 +29,26 @@ const phoneNumRules = ref<FormRules<PhoneNumForm>>({
 })
 const subPhonenum = async (): Promise<void> => {
   await phoneNumFormRef.value.validate()
-  const phoneNumObject = {
-    phoneNumber: phoneNumForm.value.phoneNumber
-  }
-  const [err, data] = await post<string>(
-    '/user/sendCodeToPhone',
-    phoneNumObject
-  )
-  if (err !== null) {
-    console.log(err)
-  } else {
-    phoneNumForm.value.tempKey = data?.data
-    let timeout = 10
-    const timeoutCtrl = setInterval(() => {
-      if (timeout === 1) {
-        clearInterval(timeoutCtrl)
-      }
-      timeout--
-    }, 1000)
-  }
+  let timeout = 30
+  const timeoutCtrl = setInterval(() => {
+    enableSendCode.value = true
+    sendCodeCtrl.value = `${timeout}秒后重发`
+    if (timeout === 0) {
+      enableSendCode.value = false
+      sendCodeCtrl.value = '点击发送'
+      clearInterval(timeoutCtrl)
+    }
+    timeout--
+  }, 1000)
+  const [, data] = await post<string>('/user/sendCodeToPhone', { phoneNumber: phoneNumForm.value.phoneNumber })
+  phoneNumForm.value.tempKey = data?.data
 }
 const submitPhoneNum = async (): Promise<void> => {
-  const [, data] = await post<PhoneNumForm>(
-    '/user/verifyCode',
-    phoneNumForm.value
-  )
-  if (data?.code === 403) {
-    ElMessage.error('验证码不匹配！')
-  } else {
-    console.log(data)
-    ElMessage('登录成功')
-    await router.push('/')
-  }
+  const data = await submitPhoneNumber(phoneNumForm.value)
+  if (data === undefined) {
+    ElMessage.error('验证码错误')
+  } else console.log(data)
 }
-
-onMounted(() => {
-  console.log(subPhonenumBtn.value)
-})
 // 微信登录相关
 const wechatloginable = ref(false)
 const QRcodeready = ref(false)
@@ -72,39 +56,15 @@ const wechatLoginInfo = ref<wechatQRCode>({
   qrUrl: '',
   tempUserId: ''
 })
-const getQRcod = async (): Promise<FcResponse<wechatQRCode> | undefined> => {
-  const [err, data] = await get<wechatQRCode>('/wxUser/wxQr')
-  if (err === null) {
-    ElMessage.error('暂时无法获取！')
-    return undefined
-  } else {
-    return data
-  }
-}
 const getResponse = async (): Promise<void> => {
-  //   // const lock = setInterval(async (): Promise<void> => {
-  //   //   const [err, data] = await get(
-  //   //     `/wxUser/isLogin?tempUserId=${wechatLoginInfo.value.tempUserId}`
-  //   //   )
-  //   // }, 1000)
-  //   // setTimeout(() => {
-  //   //   clearInterval(lock)
-  //   // }, 30000)
-  //   // const [err, data] = await get(
-  //   //     `/wxUser/isLogin?tempUserId=${wechatLoginInfo.value.tempUserId}`
-  //   // )
-  //   // setTimeout(async () => {
-  //   //   await getResponse()
-  //   //   return void
-  //   // }, 1000)
 }
 const wechatlogin = async (): Promise<void> => {
   wechatloginable.value = true
   const data = await getQRcod()
-  wechatLoginInfo.value.qrUrl = data?.data.qrUrl
-  wechatLoginInfo.value.tempUserId = data?.data.tempUserId
+  wechatLoginInfo.value.qrUrl = data?.qrUrl
+  wechatLoginInfo.value.tempUserId = data?.tempUserId
   await getResponse()
-  console.log(wechatLoginInfo.value)
+  QRcodeready.value = true
 }
 // 定义登录表单以及规则
 const ruleFormRef = ref()
@@ -139,34 +99,6 @@ const loginRules = ref<FormRules<LoginForm>>({
     }
   ]
 })
-const loginSubmit = async (): Promise<void> => {
-  const picForm = ref({
-    uuid: pic.value.uuid,
-    codeOfUser: loginForm.value.pic
-  })
-  const loginSubForm = ref({
-    userName: loginForm.value.username,
-    password: loginForm.value.password
-  })
-  const [err] = await post('/captchaImage', picForm.value)
-  if (err === null) {
-    await ruleFormRef.value.validate()
-    const [, data] = await post('/user/login', loginSubForm.value)
-    if (data?.code === 400) {
-      ElMessage.error('该手机号已经存在用户！')
-    } else {
-      console.log(data)
-      ElMessage('登录成功')
-      loginForm.value = {
-        username: '',
-        password: '',
-        repassword: '',
-        pic: ''
-      }
-      await router.push('/')
-    }
-  }
-}
 // 定义注册表单及其相应规则
 const signinFormRef = ref()
 const signinForm = ref<SigninForm>({
@@ -197,22 +129,20 @@ const signinRules = ref<FormRules<SigninForm>>({
 })
 const signinSubmit = async (): Promise<void> => {
   await signinFormRef.value.validate()
-  const [, data] = await post<signinReturn>(
-    '/user/register',
-    signinForm.value
-  )
-  signinForm.value = {
-    phoneNumber: '',
-    password: '',
-    nickName: '',
-    gender: '男',
-    age: 0
-  }
-  if (data?.code === 409) {
+  const data = await checkPhoneNum(signinForm.value)
+  if (data === undefined) {
     ElMessage.error('该手机号已被注册！')
   } else {
+    console.log(data, 1)
     ElMessage('注册成功')
     loginIng.value = 0
+    signinForm.value = {
+      phoneNumber: '',
+      password: '',
+      nickName: '',
+      gender: '男',
+      age: 0
+    }
   }
 }
 // 验证码
@@ -220,18 +150,18 @@ const pic = ref<picIfo>({
   img: '',
   uuid: ''
 })
-const getNumPiC = async (): Promise<void> => {
-  const [err, data] = await get<picIfo>('/captchaImage')
-  if (err !== null) console.error(err)
-  else {
-    pic.value.img = data?.data.img
-    pic.value.uuid = data?.data.uuid
-    console.log(pic.value)
-  }
+const picGet = (): void => {
+  getNumPiC()
+    .then((data) => {
+      pic.value.img = data?.img
+      pic.value.uuid = data?.uuid
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
-
 onMounted(() => {
-  void getNumPiC()
+  picGet()
 })
 </script>
 <template>
@@ -295,7 +225,7 @@ onMounted(() => {
             />
             <img
               :src="`data:image/png;base64,${pic.img}`"
-              @click="getNumPiC()"
+              @click="picGet()"
             >
           </el-form-item>
           <div style="display: flex; justify-content: center; margin-top: 10%">
@@ -307,7 +237,35 @@ onMounted(() => {
             </el-button>
             <el-button
               style="width: 30%"
-              @click="loginSubmit"
+              @click="
+                async () => {
+                  const [err] = await post('/captchaImage', {
+                    uuid: pic.uuid,
+                    codeOfUser: loginForm.pic,
+                  });
+
+                  if (err === null) {
+                    await ruleFormRef.value.validate();
+                    const [, data] = await post('/user/login', {
+                      userName: loginForm.username,
+                      password: loginForm.password,
+                    });
+                    if (data?.code === 400) {
+                      ElMessage.error('用户名或密码错误！');
+                    } else {
+                      console.log(data);
+                      ElMessage('登录成功');
+                      loginForm = {
+                        username: '',
+                        password: '',
+                        repassword: '',
+                        pic: '',
+                      };
+                      await router.push('/');
+                    }
+                  }
+                }
+              "
             >
               登录
             </el-button>
@@ -405,10 +363,10 @@ onMounted(() => {
               style="max-width: 85px; margin-right: 5px"
             />
             <el-button
-              ref="subPhonenumBtn"
+              :disabled="enableSendCode"
               @click="subPhonenum"
             >
-              点击发送
+              {{ sendCodeCtrl }}
             </el-button>
           </el-form-item>
           <el-form-item>
@@ -448,8 +406,11 @@ onMounted(() => {
             @click="loginIng = 2"
           >
             手机登录
-          </el-button><span>or</span><el-button
+          </el-button>
+          <span>or</span>
+          <el-button
             link
+            style="height: 100%"
             @click="wechatlogin"
           >
             扫码登录
@@ -548,7 +509,7 @@ onMounted(() => {
       .el-input-number {
         width: 90%;
       }
-      .phoneMenu{
+      .phoneMenu {
         .el-form-item {
           margin-bottom: 10%;
         }

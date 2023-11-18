@@ -32,7 +32,7 @@ export interface picIfo {
 }
 
 export interface PhoneNumForm {
-  phoneNumber?: number | null
+  phoneNumber: number | null
   code?: string
   tempKey?: string
   data?: string
