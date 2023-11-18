@@ -27,6 +27,8 @@ const phoneNumRules = ref<FormRules<PhoneNumForm>>({
     }
   ]
 })
+
+/** 获取验证码回调 */
 const subPhonenum = async (): Promise<void> => {
   await phoneNumFormRef.value.validate()
   let timeout = 30
@@ -47,7 +49,9 @@ const submitPhoneNum = async (): Promise<void> => {
   const data = await submitPhoneNumber(phoneNumForm.value)
   if (data === undefined) {
     ElMessage.error('验证码错误')
-  } else console.log(data)
+  } else {
+    console.log(data)
+  }
 }
 // 微信登录相关
 const wechatloginable = ref(false)
