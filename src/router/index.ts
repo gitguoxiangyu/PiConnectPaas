@@ -7,7 +7,25 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: async () => await import('@/view/LoginView.vue')
+      component: async () => await import('@/view/LoginView.vue'),
+      redirect: '/login/acocount',
+      children: [
+        {
+          path: 'acocount',
+          name: 'acocount',
+          component: async () => await import('@/components/Login/AccountLogin.vue')
+        },
+        {
+          path: 'phonenum',
+          name: 'phonenum',
+          component: async () => await import('@/components/Login/PhoneNumLogin.vue')
+        },
+        {
+          path: 'regiester',
+          name: 'regiester',
+          component: async () => await import('@/components/Login/ReGiester.vue')
+        }
+      ]
     },
     {
       path: '/',
