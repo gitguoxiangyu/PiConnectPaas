@@ -5,18 +5,20 @@ import Axios from 'axios'
 const axios = Axios
 // 配置不同环境下，axios的默认请求地址
 if (process.env.NODE_ENV === 'development')
-  axios.defaults.baseURL = ''
+  axios.defaults.baseURL = 'http://1.15.179.24:9520'
 else if (process.env.NODE_ENV === 'debug')
-  axios.defaults.baseURL = ''
+  axios.defaults.baseURL = 'http://1.15.179.24:9520'
 else if (process.env.NODE_ENV === 'production')
-  axios.defaults.baseURL = ''
+  axios.defaults.baseURL = 'http://1.15.179.24:9520'
 
 axios.defaults.timeout = 3000
 
 export interface FcResponse<T> {
-  err: string
-  errMsg: string
+  err?: string
+  errMsg?: string
   data: T
+  code: number
+  message: string
 }
 
 // params 参数对象实现该接口
@@ -56,7 +58,7 @@ axios.interceptors.request.use(
 // 封装 get 请求函数
 // 参数 ： url 类型string 必选； params 类型实现IAnyObj的对象 必选； clearFn 类型Fn 可选 用于处理返回值的回调函数
 // 返回值 Promise  Promise的包裹值为一个[any,FcResponse<T> | undefined]元组
-export const get = async <T,> (url: string, params: IAnyObj = {}, clearFn?: Fn): Promise<[any, FcResponse<T> | undefined]> => {
+export const get = async <T,>(url: string, params: IAnyObj = {}, clearFn?: Fn): Promise<[any, FcResponse<T> | undefined]> => {
   return await new Promise(resolve => {
     axios.get(url, { params }).then((
       success => {
@@ -66,7 +68,6 @@ export const get = async <T,> (url: string, params: IAnyObj = {}, clearFn?: Fn):
           res = clearFn(success.data) as FcResponse<T>
         else
           res = success.data as FcResponse<T>
-
         resolve([null, res])
       }
     )).catch(err => {
