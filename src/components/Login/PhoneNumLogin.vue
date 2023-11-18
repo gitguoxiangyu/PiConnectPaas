@@ -13,9 +13,10 @@ const router = useRouter()
  */
 
 const phoneNumFormRef = ref()
-// 定义发送按钮的状态
-const sendCodeCtrl = ref('点击发送')
-const enableSendCode = ref(false)
+
+/** 发送验证码还需等待的时间 */
+const codeSendTime = ref(0)
+
 // 定义电话验证码表单
 const phoneNumForm = ref<PhoneNumForm>({
   phoneNumber: null,
@@ -40,16 +41,14 @@ const subPhonenum = async (): Promise<void> => {
   await phoneNumFormRef.value.validate()
   ElMessage('发送成功')
   // 设置发送验证码的倒计时
-  let timeout = 30
+
+  codeSendTime.value = 30
+
   const timeoutCtrl = setInterval(() => {
-    enableSendCode.value = true
-    sendCodeCtrl.value = `${timeout}秒后重发`
-    if (timeout === 0) {
-      enableSendCode.value = false
-      sendCodeCtrl.value = '点击发送'
+    if (codeSendTime.value === 0) {
       clearInterval(timeoutCtrl)
     }
-    timeout--
+    codeSendTime.value--
   }, 1000)
   // 获取临时密钥
   const [, data] = await post<string>('/user/sendCodeToPhone', {
@@ -99,10 +98,10 @@ const submitPhoneNum = async (): Promise<void> => {
         style="max-width: 85px; margin-right: 5px"
       />
       <el-button
-        :disabled="enableSendCode"
+        :disabled="Boolean(codeSendTime)"
         @click="subPhonenum"
       >
-        {{ sendCodeCtrl }}
+        {{ codeSendTime ? `${codeSendTime}秒后重发` : '点击发送' }}
       </el-button>
     </el-form-item>
     <el-form-item>
