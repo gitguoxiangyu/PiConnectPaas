@@ -1,97 +1,77 @@
 <template>
-  <el-container style="height: 100vh">
+  <el-container
+    style="height: 100vh"
+    @click="closeperson"
+  >
     <el-header>
-      <div class="head">
-        <div>
-          <span>可视化管理系统</span>
-        </div>
-        <el-menu
-          mode="horizontal"
-          background-color="#373d41"
-          text-color="#fff"
-          router
-        >
-          <el-button
-            type="info"
-            @click="logout"
-          >
-            退出
-          </el-button>
-          <el-menu-item index="/direction">
-            查看方向
-          </el-menu-item>
-        </el-menu>
-      </div>
+      <!-- 头部组件 -->
+      <MainHeader
+        @fn1="personpage"
+      />
     </el-header>
     <el-container>
-      <el-aside>
-        <el-col :span="24">
-          <el-menu
-            background-color="#333744"
-            class="el-menu-vertical-demo"
-            active-text-color="#ffd04b"
-            text-color="#fff"
-            router
-          >
-            <el-sub-menu index="1">
-              <template #title>
-                <span>系统界面</span>
-              </template>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="/first">
-                  界面一
-                </el-menu-item>
-                <el-menu-item index="/second">
-                  界面二
-                </el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="/third">
-                  界面三
-                </el-menu-item>
-              </el-menu-item-group>
-            </el-sub-menu>
-            <el-menu-item index="/othermes">
-              <span>其它信息</span>
-            </el-menu-item>
-            <el-menu-item
-              index="/more"
-              disabled
-            >
-              <span>更多介绍</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
+      <el-aside :width="collapse ? '65px' : '220px'">
+        <MainSideBar
+          :is-collapse="collapse"
+          @fn="sidebar"
+        />
       </el-aside>
       <el-main>
         <router-view />
       </el-main>
     </el-container>
   </el-container>
+
+  <el-card
+    class="box-card"
+    :style="{ width: personopen ? '300px' : '0px' }"
+  >
+    <template #header>
+      <div class="card-header">
+        <span>这里用来展示用户信息</span>
+        <el-button
+          class="button"
+          text
+          @click="closeperson"
+        >
+          关闭
+        </el-button>
+      </div>
+    </template>
+    <div
+      class="text item"
+    >
+      <p>用户姓名：{{ user.name }}</p>
+      <p>用户：{{ user.username }}</p>
+    </div>
+    <template #footer>
+      Footer content
+    </template>
+  </el-card>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
-
-export default defineComponent({
-  name: 'MainPage',
-  setup () {
-    const router = useRouter()
-    const logout = async (): Promise<void> => {
-      ElMessage({
-        showClose: true,
-        type: 'success',
-        message: '您已退出登录!'
-      })
-      await router.push('/login')
-    }
-    return {
-      logout
-    }
-  }
+<script lang="ts" setup>
+import MainHeader from '../components/MainPage/MainHeader.vue'
+import MainSideBar from '../components/MainPage/MainSideBar.vue'
+import { ref, reactive } from 'vue'
+const collapse = ref(false)
+const personopen = ref(false)
+const sidebar = (): void => {
+  collapse.value = !collapse.value
+}
+const personpage = (): void => {
+  personopen.value = !personopen.value
+}
+const closeperson = (): void => {
+  personopen.value = false
+}
+const user = reactive({
+  name: 'admin',
+  username: 'bbb',
+  password: 'ddd',
+  imgUrl: 'src/assets/loginlogo.JPG'
 })
+
 </script>
 
 <style lang="scss" scoped>
@@ -142,13 +122,13 @@ body, html {
 
 .el-aside {
   background-color: #333744;
-  width: 200px;
+  transition: width 0.2s;
   border-bottom-left-radius: 10px;  /* 添加圆角属性 */
+  border:0!important;
 
-  .el-menu {
-    border-right: none;
-    border: 0 !important;
-  }
+}
+.el-menu{
+  border: 0 !important;
 }
 
 .el-main {
@@ -165,15 +145,35 @@ body, html {
   cursor: pointer;
 }
 
-.el-menu {
-  height: 100%;
-}
-
 .router-link-active {
   text-decoration: none;
 }
 
 a {
   text-decoration: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  z-index: 3;
+  position: absolute;
+  transition: width 0.2s;
+  // 设置宽度变化速度
+  top:0;
+  bottom: 0;
+  right: 0;
 }
 </style>
