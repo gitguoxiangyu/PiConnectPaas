@@ -3,7 +3,12 @@
     class="toggle-button"
     @click="toggleCollapse"
   >
-    |||
+    <el-icon v-if="isCollapse">
+      <Expand />
+    </el-icon>
+    <el-icon v-else>
+      <Fold />
+    </el-icon>
   </div>
   <el-menu
     background-color="#333744"
@@ -58,11 +63,13 @@
   </el-menu>
 </template>
 <script lang="ts" setup>
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import {
   Document,
   Location,
-  Setting
+  Setting,
+  Expand,
+  Fold
 } from '@element-plus/icons-vue'
 
 const isCollapse = ref(false)
@@ -76,7 +83,7 @@ const toggleCollapse = (): void => {
   isCollapse.value = !isCollapse.value // 切换 isCollapse 的值，实现折叠和展开的切换
   emit('fn')
 }
-
+// 向父组件传值
 const emit = defineEmits<(event: 'fn') => void>()
 </script>
 <style lang="scss" scoped>

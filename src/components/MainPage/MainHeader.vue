@@ -16,7 +16,7 @@
         </el-menu-item>
       </el-menu>
 
-      <el-dropdown trigger="hover">
+      <el-dropdown trigger="click">
         <div class="user">
           <el-avatar
             :size="40"
@@ -27,7 +27,7 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="ownpage">
+            <el-dropdown-item @click="PersonCollapse">
               <img
                 src="@/assets/设置.png"
                 alt=""
@@ -63,7 +63,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { reactive } from 'vue'
+import { reactive, defineEmits } from 'vue'
 const router = useRouter()
 const logout = async (): Promise<void> => {
   ElMessage({
@@ -73,9 +73,6 @@ const logout = async (): Promise<void> => {
   })
   await router.push('/login')
 }
-const ownpage = (): void => {
-  // 设置展示个人信息的页面
-}
 // 假数据
 const user = reactive({
   name: 'admin',
@@ -83,6 +80,12 @@ const user = reactive({
   password: '',
   imgUrl: 'src/assets/loginlogo.JPG'
 })
+const PersonCollapse = (): void => {
+  emit('fn1')
+  console.log('di')
+}
+// 向父组件传值
+const emit = defineEmits<(event: 'fn1') => void>()
 </script>
 
 <style lang="scss" scoped>

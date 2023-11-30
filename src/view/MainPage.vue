@@ -1,14 +1,19 @@
 <template>
-  <el-container style="height: 100vh">
+  <el-container
+    style="height: 100vh"
+    @click="closeperson"
+  >
     <el-header>
       <!-- 头部组件 -->
-      <MainHeader />
+      <MainHeader
+        @fn1="personpage"
+      />
     </el-header>
     <el-container>
       <el-aside :width="collapse ? '65px' : '220px'">
         <MainSideBar
           :is-collapse="collapse"
-          @fn="chanNum"
+          @fn="sidebar"
         />
       </el-aside>
       <el-main>
@@ -16,16 +21,56 @@
       </el-main>
     </el-container>
   </el-container>
+
+  <el-card
+    class="box-card"
+    :style="{ width: personopen ? '300px' : '0px' }"
+  >
+    <template #header>
+      <div class="card-header">
+        <span>这里用来展示用户信息</span>
+        <el-button
+          class="button"
+          text
+          @click="closeperson"
+        >
+          关闭
+        </el-button>
+      </div>
+    </template>
+    <div
+      class="text item"
+    >
+      <p>用户姓名：{{ user.name }}</p>
+      <p>用户：{{ user.username }}</p>
+    </div>
+    <template #footer>
+      Footer content
+    </template>
+  </el-card>
 </template>
 
 <script lang="ts" setup>
 import MainHeader from '../components/MainPage/MainHeader.vue'
 import MainSideBar from '../components/MainPage/MainSideBar.vue'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 const collapse = ref(false)
-const chanNum = (): void => {
+const personopen = ref(false)
+const sidebar = (): void => {
   collapse.value = !collapse.value
 }
+const personpage = (): void => {
+  personopen.value = !personopen.value
+}
+const closeperson = (): void => {
+  personopen.value = false
+}
+const user = reactive({
+  name: 'admin',
+  username: 'bbb',
+  password: 'ddd',
+  imgUrl: 'src/assets/loginlogo.JPG'
+})
 
 </script>
 
@@ -106,5 +151,29 @@ body, html {
 
 a {
   text-decoration: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.box-card {
+  z-index: 3;
+  position: absolute;
+  transition: width 0.2s;
+  // 设置宽度变化速度
+  top:0;
+  bottom: 0;
+  right: 0;
 }
 </style>
