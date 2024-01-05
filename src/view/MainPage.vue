@@ -37,17 +37,12 @@
               <template #title>
                 <span>系统界面</span>
               </template>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="/first">
-                  界面一
+              <el-menu-item-group title="设备">
+                <el-menu-item index="/devicesmanage">
+                  设备管理
                 </el-menu-item>
-                <el-menu-item index="/second">
-                  界面二
-                </el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="/third">
-                  界面三
+                <el-menu-item index="/devicesmonitor">
+                  设备监控
                 </el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
@@ -55,15 +50,14 @@
               <span>其它信息</span>
             </el-menu-item>
             <el-menu-item
-              index="/more"
-              disabled
+              link
             >
-              <span>更多介绍</span>
+              <span>下载agent</span>
             </el-menu-item>
           </el-menu>
         </el-col>
       </el-aside>
-      <el-main>
+      <el-main style="background-color: white;">
         <router-view />
       </el-main>
     </el-container>

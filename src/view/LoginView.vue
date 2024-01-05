@@ -131,7 +131,7 @@ const wechatlogin = async (): Promise<void> => {
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     .bg {
-      background: url("../assets/loginlogo.JPG") no-repeat 100% center; //图片靠右对齐
+      background: url("../assets/loginlogo.jpeg") no-repeat 100% center; //图片靠右对齐
       background-size: cover;
       height: 100%;
     }

@@ -1,0 +1,22 @@
+[
+  {"device_name": "Workstation1", "temperature": 25.5, "humidity": 40, "cpu_usage": 15, "memory_usage": 30, "status": "Online", "account_type": "Admin"},
+  {"device_name": "Laptop2", "temperature": 28.0, "humidity": 35, "cpu_usage": 20, "memory_usage": 25, "status": "Offline", "account_type": "User"},
+  {"device_name": "PC3", "temperature": 24.5, "humidity": 45, "cpu_usage": 10, "memory_usage": 40, "status": "Online", "account_type": "Admin"},
+  {"device_name": "Laptop4", "temperature": 27.0, "humidity": 30, "cpu_usage": 18, "memory_usage": 35, "status": "Online", "account_type": "User"},
+  {"device_name": "Desktop5", "temperature": 26.5, "humidity": 38, "cpu_usage": 22, "memory_usage": 28, "status": "Offline", "account_type": "Admin"},
+  {"device_name": "Laptop6", "temperature": 25.0, "humidity": 42, "cpu_usage": 14, "memory_usage": 32, "status": "Online", "account_type": "User"},
+  {"device_name": "PC7", "temperature": 23.5, "humidity": 50, "cpu_usage": 12, "memory_usage": 38, "status": "Offline", "account_type": "Admin"},
+  {"device_name": "Laptop8", "temperature": 28.5, "humidity": 32, "cpu_usage": 16, "memory_usage": 36, "status": "Online", "account_type": "User"},
+  {"device_name": "Workstation9", "temperature": 24.0, "humidity": 48, "cpu_usage": 8, "memory_usage": 42, "status": "Online", "account_type": "Admin"},
+  {"device_name": "Laptop10", "temperature": 26.0, "humidity": 36, "cpu_usage": 24, "memory_usage": 26, "status": "Offline", "account_type": "User"},
+  {"device_name": "PC11", "temperature": 23.0, "humidity": 55, "cpu_usage": 11, "memory_usage": 45, "status": "Online", "account_type": "Admin"},
+  {"device_name": "Desktop12", "temperature": 27.5, "humidity": 34, "cpu_usage": 19, "memory_usage": 29, "status": "Offline", "account_type": "User"},
+  {"device_name": "Laptop13", "temperature": 25.5, "humidity": 46, "cpu_usage": 13, "memory_usage": 33, "status": "Online", "account_type": "Admin"},
+  {"device_name": "PC14", "temperature": 27.0, "humidity": 28, "cpu_usage": 17, "memory_usage": 37, "status": "Online", "account_type": "User"},
+  {"device_name": "Workstation15", "temperature": 23.5, "humidity": 52, "cpu_usage": 9, "memory_usage": 41, "status": "Offline", "account_type": "Admin"},
+  {"device_name": "Laptop16", "temperature": 26.0, "humidity": 38, "cpu_usage": 23, "memory_usage": 27, "status": "Online", "account_type": "User"},
+  {"device_name": "Desktop17", "temperature": 26.5, "humidity": 44, "cpu_usage": 21, "memory_usage": 30, "status": "Online", "account_type": "Admin"},
+  {"device_name": "PC18", "temperature": 24.0, "humidity": 50, "cpu_usage": 15, "memory_usage": 34, "status": "Offline", "account_type": "User"},
+  {"device_name": "Laptop19", "temperature": 25.0, "humidity": 48, "cpu_usage": 10, "memory_usage": 39, "status": "Online", "account_type": "Admin"},
+  {"device_name": "Laptop20", "temperature": 28.0, "humidity": 30, "cpu_usage": 18, "memory_usage": 31, "status": "Offline", "account_type": "User"}
+]

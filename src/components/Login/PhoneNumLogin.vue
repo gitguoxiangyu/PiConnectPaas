@@ -55,6 +55,7 @@ const subPhonenum = async (): Promise<void> => {
     phoneNumber: phoneNumForm.value.phoneNumber
   })
   phoneNumForm.value.tempKey = data?.data
+  console.log(phoneNumForm.value.tempKey)
 }
 /**
  * 提交手机号码和验证码

@@ -30,7 +30,19 @@ const router = createRouter({
     {
       path: '/',
       name: 'mainPage',
-      component: async () => await import('@/view/MainPage.vue')
+      component: async () => await import('@/view/MainPage.vue'),
+      children: [
+        {
+          path: 'devicesmanage',
+          name: 'devicesmanage',
+          component: async () => await import('@/components/Devices/DevicesManage.vue')
+        },
+        {
+          path: 'devicesmonitor',
+          name: 'devicesmonitor',
+          component: async () => await import('@/components/Devices/DevicesMonitor.vue')
+        }
+      ]
     }
 
   ]

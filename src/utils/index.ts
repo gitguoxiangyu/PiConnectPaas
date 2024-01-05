@@ -4,12 +4,7 @@ import Axios from 'axios'
 
 const axios = Axios
 // 配置不同环境下，axios的默认请求地址
-if (process.env.NODE_ENV === 'development')
-  axios.defaults.baseURL = 'http://1.15.179.24:9520'
-else if (process.env.NODE_ENV === 'debug')
-  axios.defaults.baseURL = 'http://1.15.179.24:9520'
-else if (process.env.NODE_ENV === 'production')
-  axios.defaults.baseURL = 'http://1.15.179.24:9520'
+if (process.env.NODE_ENV === 'development') { axios.defaults.baseURL = 'http://8.137.10.180:9520' } else if (process.env.NODE_ENV === 'debug') { axios.defaults.baseURL = 'http://1.15.179.24:9520' } else if (process.env.NODE_ENV === 'production') { axios.defaults.baseURL = 'http://1.15.179.24:9520' }
 
 axios.defaults.timeout = 3000
 
@@ -32,8 +27,7 @@ axios.interceptors.request.use(
     // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
     // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
     const token: string | null = window.localStorage.token
-    if (token !== null)
-      config.headers.Authorization = token
+    if (token !== null) { config.headers.Authorization = token }
     return config
   },
   async error => {
@@ -64,10 +58,7 @@ export const get = async <T,>(url: string, params: IAnyObj = {}, clearFn?: Fn): 
       success => {
         let res: FcResponse<T>
         // 如果回调函数存在，则执行回调函数；不存在，则直接把success返回值的data作为Promise返回值
-        if (clearFn !== undefined)
-          res = clearFn(success.data) as FcResponse<T>
-        else
-          res = success.data as FcResponse<T>
+        if (clearFn !== undefined) { res = clearFn(success.data) as FcResponse<T> } else { res = success.data as FcResponse<T> }
         resolve([null, res])
       }
     )).catch(err => {
